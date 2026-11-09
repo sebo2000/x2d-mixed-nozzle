@@ -9,10 +9,23 @@ Bambu Studio only slices the X2D with the same nozzle size on both sides. It doe
 ## Requirements
 
 - Bambu Studio installed. The script finds it in the usual places; otherwise pass `--cli <path to BambuStudio or bambu-studio.exe>`.
-- Python 3.9 or newer.
-- The three scripts in one folder: `x2d_mixed_slice.py`, `flatten.py`, `fix_plate_diameters.py`.
+- Python 3.9 or newer. For the window (below) it must include Tkinter: the installer from [python.org](https://www.python.org/downloads/) does. With Homebrew, also run `brew install python-tk`.
+- The three scripts in one folder: `x2d_mixed_slice.py`, `flatten.py`, `fix_plate_diameters.py`. For the window, also `x2d_mixed_gui.py` and the launcher for your system.
 
-## How to use
+## The window (easiest)
+
+Double-click **`X2D Mixed Nozzle.command`** (macOS) or **`X2D Mixed Nozzle.bat`** (Windows), or run `python3 x2d_mixed_gui.py`.
+
+1. **Open…** your project, saved in Bambu Studio as described in step 1 below.
+2. Choose the nozzle on **Main** and **Auxiliary**, then for each filament whether it prints with Main or Auxiliary.
+3. Adjust the layer height, first layer, prime tower or plate if needed, and press **Slice**.
+4. When it says **Done**, press **Open in Bambu Studio** and print as in step 3 below. If it says **Do not print this file**, the log underneath says why.
+
+The window runs the same script as the command line below, with the same checks.
+
+On macOS, a launcher downloaded from the internet may be blocked the first time: right-click it, choose **Open**, then **Open** again. If it says it can't be opened because it isn't executable, run `chmod +x "X2D Mixed Nozzle.command"` once in Terminal.
+
+## How to use (command line)
 
 1. **Prepare the project in Bambu Studio** on the printer preset **Bambu Lab X2D 0.4 nozzle**. A project made on another X2D nozzle preset is switched over automatically, but its process changes are lost. Assign filaments as usual:
    - a filament per object or part, or painted regions;

@@ -238,8 +238,10 @@ def ticks_to_ranges(files, settings):
 # ---- G-code checks --------------------------------------------------------------------------------------
 
 def analyse_gcode(text):
-    """Per tool: line widths (counted per segment) and printed Zs; plus the first layer Z and tool order."""
-    tool, z, width = None, None, None
+    """Per tool: line widths (counted per segment) and printed Zs; plus the first layer Z and tool order.
+    Prime tower lines are left out of the per-tool figures (the tower is printed on every layer by whichever
+    nozzle is loaded) but count for the first layer, which is the lowest Z of anything printed."""
+    tool, z, width, tower, lowest = None, None, None, False, None
     widths = collections.defaultdict(collections.Counter)
     zs = collections.defaultdict(set)
     order = []
@@ -253,16 +255,20 @@ def analyse_gcode(text):
             m = re.match(r";\s*Z_HEIGHT:\s*([\d.]+)", line)
             if m:
                 z = round(float(m.group(1)), 3)
+            m = re.match(r";\s*FEATURE:\s*(.*)", line)
+            if m:
+                tower = "tower" in m.group(1).lower()
             m = re.match(r";\s*LINE_WIDTH:\s*([\d.]+)", line)
             if m:
                 width = round(float(m.group(1)), 3)
-        elif line.startswith("G1 ") and " E" in line and z is not None:
+        elif line.startswith("G1 ") and " E" in line and (" X" in line or " Y" in line) and z is not None:
             e = re.search(r" E([\d.]+)", line)
-            if e and float(e.group(1)) > 0 and width:
+            if e and float(e.group(1)) > 0:
+                lowest = z if lowest is None else min(lowest, z)
+            if e and float(e.group(1)) > 0 and width and not tower:
                 widths[tool][width] += 1
                 zs[tool].add(z)
-    first = min((min(v) for v in zs.values() if v), default=None)
-    return widths, zs, first, order
+    return widths, zs, lowest, order
 
 
 def layer_step(zs):
