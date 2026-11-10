@@ -16,6 +16,8 @@ Bambu Studio only slices the X2D with the same nozzle size on both sides. It doe
 
 Double-click **`X2D Mixed Nozzle.command`** (macOS) or **`X2D Mixed Nozzle.bat`** (Windows), or run `python3 x2d_mixed_gui.py`.
 
+![The X2D Mixed Nozzle window before a project is opened](docs/screenshot.png)
+
 1. **Open…** your project, saved in Bambu Studio as described in step 1 below.
 2. Choose the nozzle on **Main** and **Auxiliary**, then for each filament whether it prints with Main or Auxiliary.
 3. Adjust the layer height, first layer, prime tower or plate if needed, and press **Slice**.
